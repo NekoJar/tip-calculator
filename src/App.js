@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./styles.css";
+import { InputBill } from "./InputBill";
+import { Satisfaction } from "./Satisfaction";
+import { TotalBill } from "./TotalBill";
+import { Reset } from "./Reset";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="body">
+      <Body />
     </div>
   );
 }
 
-export default App;
+function Body() {
+  const [bill, setBill] = useState("");
+  const [tip, setTip] = useState(0);
+  const [friendTip, setFriendTip] = useState(0);
+
+  const Tips = bill * ((tip + friendTip) / 2 / 100);
+  console.log(Tips);
+
+  function handleReset() {
+    setBill("");
+    setTip(0);
+    setFriendTip(0);
+  }
+
+  return (
+    <div>
+      <InputBill bill={bill} setBill={setBill} />
+      <Satisfaction tip={tip} setTip={setTip}>
+        How was the Service?
+      </Satisfaction>
+      <Satisfaction tip={friendTip} setTip={setFriendTip}>
+        How was your friend said about the Service?
+      </Satisfaction>
+      {bill > 0 && (
+        <>
+          <TotalBill bill={bill} Tips={Tips} />
+          <Reset bill={bill} onReset={handleReset} />
+        </>
+      )}
+    </div>
+  );
+}
